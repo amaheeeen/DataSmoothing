@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Smoothing Time Series - Final Revision</title>
+    <title>Data Smoothing Time Series - Ultimate Version</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -43,10 +43,19 @@
         
         /* Math Styling */
         .math { font-family: 'Times New Roman', serif; font-style: italic; font-weight: 500; }
-        .math-block { background: #f1f5f9; padding: 0.5rem 1rem; border-radius: 0.5rem; font-family: 'Times New Roman', serif; font-style: italic; border-left: 4px solid #6366f1; display: inline-block; margin: 0.5rem 0; }
         
         /* SVG Fixes */
         .chart-svg { width: 100%; height: 100%; overflow: visible; }
+        
+        /* Live Ticker Animation */
+        @keyframes pulse-green { 0%, 100% { color: #16a34a; } 50% { color: #22c55e; } }
+        @keyframes pulse-red { 0%, 100% { color: #dc2626; } 50% { color: #ef4444; } }
+        .live-up { animation: pulse-green 2s infinite; }
+        .live-down { animation: pulse-red 2s infinite; }
+
+        /* Pattern Animations for Slide 11 */
+        @keyframes drawLine { to { stroke-dashoffset: 0; } }
+        .pattern-flat { background: repeating-linear-gradient(45deg, #e2e8f0, #e2e8f0 10px, #f1f5f9 10px, #f1f5f9 20px); }
         
         /* Popup Result */
         #plot-result {
@@ -65,7 +74,6 @@
             <div class="min-w-full h-full relative overflow-hidden bg-slate-950 text-white flex flex-col justify-between p-12 text-center">
                 <div class="absolute inset-0 bg-gradient-to-br from-indigo-950 via-slate-900 to-black z-0"></div>
                 <div class="wave-bg opacity-20"></div>
-                
                 <div class="z-20 w-full flex justify-between items-start border-b border-white/10 pb-4">
                     <div class="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 backdrop-blur-md">
                         <span class="w-2 h-2 rounded-full bg-indigo-400 animate-ping"></span>
@@ -76,7 +84,6 @@
                         <div class="text-white font-bold text-lg">2025/2026</div>
                     </div>
                 </div>
-                
                 <div class="z-20 max-w-6xl mx-auto flex flex-col items-center">
                     <h1 class="text-6xl md:text-8xl font-extrabold tracking-tight leading-tight text-white mb-6">
                         Data Smoothing <br> <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Time Series</span>
@@ -85,13 +92,9 @@
                         "Teknik membersihkan data deret waktu dari noise (gangguan) untuk mengungkap pola sinyal yang sebenarnya guna meningkatkan akurasi prediksi."
                     </p>
                 </div>
-
                 <div class="z-20 bg-white/5 border border-white/10 backdrop-blur-sm rounded-xl p-6 w-full max-w-4xl mx-auto">
                     <div class="flex flex-wrap justify-between items-center gap-6">
-                        <div class="text-left">
-                            <span class="text-xs text-slate-500 uppercase font-bold tracking-[0.2em] block mb-1">TIM PENYUSUN</span>
-                            <div class="h-1 w-16 bg-indigo-500 rounded"></div>
-                        </div>
+                        <div class="text-left"><span class="text-xs text-slate-500 uppercase font-bold tracking-[0.2em] block mb-1">TIM PENYUSUN</span><div class="h-1 w-16 bg-indigo-500 rounded"></div></div>
                         <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-sm border border-indigo-500/30">FK</div><span class="font-bold">Farhan Kholid</span></div>
                         <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-sm border border-purple-500/30">MA</div><span class="font-bold">M. Ali Akbar</span></div>
                         <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-teal-500/20 text-teal-400 flex items-center justify-center font-bold text-sm border border-teal-500/30">FI</div><span class="font-bold">Fahmi Idris</span></div>
@@ -101,52 +104,50 @@
 
             <div class="min-w-full h-full p-8 bg-slate-50 flex flex-col justify-center">
                 <div class="slide-content h-full grid grid-cols-2 gap-8 items-center">
-                    <div class="flex flex-col justify-center h-full bg-white p-8 rounded-3xl shadow-sm border border-slate-200 overflow-y-auto">
+                    <div class="flex flex-col justify-center h-full bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
                         <div class="mb-6">
                             <div class="w-14 h-14 bg-indigo-600 text-white rounded-xl flex items-center justify-center text-3xl mb-4 shadow-lg shadow-indigo-200"><i class="ph-bold ph-trend-up"></i></div>
                             <h2 class="text-4xl font-bold text-slate-900 mb-4">Definisi Time Series</h2>
                             <p class="text-lg text-slate-600 leading-relaxed text-justify mb-4">
-                                Time Series adalah sekumpulan titik data yang direkam pada interval waktu tertentu secara berurutan dan kronologis. Berbeda dengan data <i>Cross-Sectional</i> yang diambil pada satu waktu, Time Series sangat bergantung pada urutan.
+                                Sekumpulan titik data yang direkam pada interval waktu tertentu secara berurutan dan kronologis. Urutan (<span class="math">t</span>) adalah variabel independen terpenting.
                             </p>
                             <div class="bg-indigo-50 p-4 rounded-lg border-l-4 border-indigo-500 text-sm text-indigo-800">
-                                <strong>Mengapa Smoothing Penting?</strong><br>
-                                Data Time Series seringkali "kotor" dan fluktuatif. Smoothing membantu kita melihat gambaran besar (Trend) tanpa terganggu oleh fluktuasi harian.
+                                <strong>Kunci Utama:</strong> Data ini memiliki <i>Autokorelasi</i>, artinya data hari ini sangat dipengaruhi oleh data hari kemarin. Tidak boleh diacak.
                             </div>
-                        </div>
-                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
-                            <h4 class="font-bold text-slate-800 text-base uppercase tracking-wider mb-3 border-b border-slate-300 pb-2">Hukum Wajib:</h4>
-                            <ul class="text-base text-slate-700 space-y-3">
-                                <li class="flex items-center gap-3"><i class="ph-fill ph-check-circle text-green-600 text-xl"></i> <span><strong>Order Matters:</strong> Urutan (<span class="math">t<sub>1</sub>, t<sub>2</sub></span>) Sakral.</span></li>
-                                <li class="flex items-center gap-3"><i class="ph-fill ph-check-circle text-green-600 text-xl"></i> <span><strong>Fixed Interval:</strong> Jarak waktu konsisten (harian, jam, detik).</span></li>
-                            </ul>
                         </div>
                     </div>
                     <div class="flex flex-col gap-4 h-full max-h-[85vh] justify-center">
-                        <div class="flex-1 bg-white p-5 rounded-2xl shadow-md border border-slate-200 flex items-center gap-5 overflow-hidden">
+                        <div class="flex-1 bg-white p-6 rounded-2xl shadow-lg border border-slate-200 flex items-center gap-6 overflow-hidden relative">
                             <div class="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center text-green-700 text-3xl shrink-0"><i class="ph-fill ph-chart-line-up"></i></div>
                             <div class="flex-1">
-                                <div class="font-bold text-xl text-slate-800">Saham (Trend)</div>
-                                <div class="h-16 w-full text-green-500">
-                                    <svg viewBox="0 0 100 40" class="chart-svg stroke-current fill-none stroke-[2]"><path d="M0,35 L10,30 L20,32 L30,25 L40,28 L50,15 L60,20 L70,10 L80,12 L90,5 L100,2" /></svg>
+                                <div class="flex justify-between items-center mb-1">
+                                    <div class="font-bold text-xl text-slate-800">BBCA.JK</div>
+                                    <div class="font-mono font-bold text-green-600 live-up" id="live-stock">9,250.00</div>
                                 </div>
+                                <div class="text-xs text-slate-400 mb-2">Updated: <span class="font-mono">Live</span></div>
+                                <div class="h-12 w-full text-green-500"><svg viewBox="0 0 100 40" class="chart-svg stroke-current fill-none stroke-[2]"><path d="M0,30 L10,25 L20,28 L30,20 L40,22 L50,15 L60,18 L70,10 L80,12 L90,5 L100,8" /></svg></div>
                             </div>
                         </div>
-                        <div class="flex-1 bg-white p-5 rounded-2xl shadow-md border border-slate-200 flex items-center gap-5 overflow-hidden">
+                        <div class="flex-1 bg-white p-6 rounded-2xl shadow-lg border border-slate-200 flex items-center gap-6 overflow-hidden relative">
                             <div class="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center text-blue-700 text-3xl shrink-0"><i class="ph-fill ph-storefront"></i></div>
                             <div class="flex-1">
-                                <div class="font-bold text-xl text-slate-800">Penjualan (Seasonal)</div>
-                                <div class="h-16 w-full text-blue-500">
-                                    <svg viewBox="0 0 100 40" class="chart-svg stroke-current fill-none stroke-[2]"><path d="M0,35 L10,35 L10,20 L25,20 L25,35 L40,35 L40,15 L55,15 L55,35 L70,35 L70,10 L85,10 L85,35 L100,35" /></svg>
+                                <div class="flex justify-between items-center mb-1">
+                                    <div class="font-bold text-xl text-slate-800">Sales Q4</div>
+                                    <div class="font-mono font-bold text-blue-600" id="live-sales">Rp 12.5M</div>
                                 </div>
+                                <div class="text-xs text-slate-400 mb-2">Seasonal Trend</div>
+                                <div class="h-12 w-full text-blue-500"><svg viewBox="0 0 100 40" class="chart-svg stroke-current fill-none stroke-[2]"><path d="M0,35 L10,35 L10,20 L25,20 L25,35 L40,35 L40,15 L55,15 L55,35 L70,35 L70,10 L85,10 L85,35 L100,35" /></svg></div>
                             </div>
                         </div>
-                        <div class="flex-1 bg-white p-5 rounded-2xl shadow-md border border-slate-200 flex items-center gap-5 overflow-hidden">
+                        <div class="flex-1 bg-white p-6 rounded-2xl shadow-lg border border-slate-200 flex items-center gap-6 overflow-hidden relative">
                             <div class="w-16 h-16 bg-red-100 rounded-xl flex items-center justify-center text-red-700 text-3xl shrink-0"><i class="ph-fill ph-thermometer"></i></div>
                             <div class="flex-1">
-                                <div class="font-bold text-xl text-slate-800">Sensor IoT (Noise)</div>
-                                <div class="h-16 w-full text-red-500">
-                                    <svg viewBox="0 0 100 40" class="chart-svg stroke-current fill-none stroke-[2]"><path d="M0,20 L5,22 L10,18 L15,25 L20,15 L25,23 L30,17 L35,22 L40,20 L45,20 L50,35 L55,5 L60,20 L65,21 L70,19 L75,22 L80,18 L85,20 L90,21 L95,19 L100,20" /></svg>
+                                <div class="flex justify-between items-center mb-1">
+                                    <div class="font-bold text-xl text-slate-800">Server Temp</div>
+                                    <div class="font-mono font-bold text-red-600 live-down" id="live-temp">42.5°C</div>
                                 </div>
+                                <div class="text-xs text-slate-400 mb-2">High Noise / Fluctuation</div>
+                                <div class="h-12 w-full text-red-500"><svg viewBox="0 0 100 40" class="chart-svg stroke-current fill-none stroke-[2]"><path d="M0,20 L5,25 L10,15 L15,22 L20,18 L25,24 L30,16 L35,21 L40,19 L45,23 L50,17 L55,22 L60,18 L65,25 L70,15 L75,21 L80,19 L85,24 L90,16 L95,22 L100,18" /></svg></div>
                             </div>
                         </div>
                     </div>
@@ -156,55 +157,25 @@
             <div class="min-w-full h-full p-10 bg-white flex flex-col">
                 <div class="slide-content h-full flex flex-col">
                     <div class="flex justify-between items-end mb-4 border-b-2 border-slate-100 pb-2">
-                        <div>
-                            <span class="text-indigo-600 font-bold tracking-widest text-sm uppercase">DEKOMPOSISI</span>
-                            <h2 class="text-3xl font-bold text-slate-900 mt-1">Bedah Komponen Data (<span class="math">Y_t</span>)</h2>
-                        </div>
-                        <p class="text-slate-500 text-lg">
-                            <span class="math-block">Y<sub>t</sub> = T + S + C + I</span>
-                        </p>
+                        <div><span class="text-indigo-600 font-bold tracking-widest text-sm uppercase">DEKOMPOSISI</span><h2 class="text-3xl font-bold text-slate-900 mt-1">Bedah Komponen Data (<span class="math">Y_t</span>)</h2></div>
+                        <p class="text-slate-500 text-lg"><span class="math-block font-mono">Y<sub>t</sub> = T + S + C + I</span></p>
                     </div>
-                    
                     <div class="flex-1 flex flex-col gap-3 overflow-hidden">
-                        
                         <div class="flex-1 bg-slate-50 rounded-xl border border-slate-200 flex items-center px-6 hover:shadow-md transition">
-                            <div class="w-1/4">
-                                <h3 class="font-bold text-xl text-blue-700">1. Trend (T)</h3>
-                                <p class="text-sm text-slate-600">Arah jangka panjang data (naik/turun/stagnan).</p>
-                            </div>
-                            <div class="flex-1 h-20 text-blue-500">
-                                <svg viewBox="0 0 400 50" preserveAspectRatio="none" class="w-full h-full stroke-current fill-none stroke-[3]"><path d="M0,45 Q200,40 400,5" /></svg>
-                            </div>
+                            <div class="w-1/4"><h3 class="font-bold text-xl text-blue-700">1. Trend (T)</h3><p class="text-sm text-slate-600">Arah jangka panjang data (naik/turun/stagnan).</p></div>
+                            <div class="flex-1 h-20 text-blue-500"><svg viewBox="0 0 400 50" preserveAspectRatio="none" class="w-full h-full stroke-current fill-none stroke-[3]"><path d="M0,45 Q200,40 400,5" /></svg></div>
                         </div>
-
                         <div class="flex-1 bg-slate-50 rounded-xl border border-slate-200 flex items-center px-6 hover:shadow-md transition">
-                            <div class="w-1/4">
-                                <h3 class="font-bold text-xl text-purple-700">2. Seasonal (S)</h3>
-                                <p class="text-sm text-slate-600">Pola berulang pada periode tetap (mis: tiap Desember).</p>
-                            </div>
-                            <div class="flex-1 h-20 text-purple-500">
-                                <svg viewBox="0 0 400 50" preserveAspectRatio="none" class="w-full h-full stroke-current fill-none stroke-[3]"><path d="M0,25 Q20,5 40,25 Q60,45 80,25 Q100,5 120,25 Q140,45 160,25 Q180,5 200,25 Q220,45 240,25 Q260,5 280,25 Q300,45 320,25 Q340,5 360,25 Q380,45 400,25" /></svg>
-                            </div>
+                            <div class="w-1/4"><h3 class="font-bold text-xl text-purple-700">2. Seasonal (S)</h3><p class="text-sm text-slate-600">Pola berulang pada periode tetap.</p></div>
+                            <div class="flex-1 h-20 text-purple-500"><svg viewBox="0 0 400 50" preserveAspectRatio="none" class="w-full h-full stroke-current fill-none stroke-[3]"><path d="M0,25 Q20,5 40,25 Q60,45 80,25 Q100,5 120,25 Q140,45 160,25 Q180,5 200,25 Q220,45 240,25 Q260,5 280,25 Q300,45 320,25 Q340,5 360,25 Q380,45 400,25" /></svg></div>
                         </div>
-
                         <div class="flex-1 bg-slate-50 rounded-xl border border-slate-200 flex items-center px-6 hover:shadow-md transition">
-                            <div class="w-1/4">
-                                <h3 class="font-bold text-xl text-orange-700">3. Cyclic (C)</h3>
-                                <p class="text-sm text-slate-600">Gelombang siklus ekonomi yang tidak tetap periodenya.</p>
-                            </div>
-                            <div class="flex-1 h-20 text-orange-500">
-                                <svg viewBox="0 0 400 50" preserveAspectRatio="none" class="w-full h-full stroke-current fill-none stroke-[3]"><path d="M0,35 Q60,10 120,35 Q200,55 300,25 Q350,15 400,30" /></svg>
-                            </div>
+                            <div class="w-1/4"><h3 class="font-bold text-xl text-orange-700">3. Cyclic (C)</h3><p class="text-sm text-slate-600">Gelombang siklus ekonomi tak pasti.</p></div>
+                            <div class="flex-1 h-20 text-orange-500"><svg viewBox="0 0 400 50" preserveAspectRatio="none" class="w-full h-full stroke-current fill-none stroke-[3]"><path d="M0,35 Q60,10 120,35 Q200,55 300,25 Q350,15 400,30" /></svg></div>
                         </div>
-
                         <div class="flex-1 bg-red-50/50 rounded-xl border border-red-200 flex items-center px-6 hover:shadow-md transition relative overflow-hidden">
-                            <div class="w-1/4 relative z-10">
-                                <h3 class="font-bold text-xl text-red-700">4. Irregular (I)</h3>
-                                <p class="text-sm text-slate-600"><strong>Noise/Error.</strong> Target utama data smoothing untuk dibersihkan.</p>
-                            </div>
-                            <div class="flex-1 h-20 text-red-500 relative z-10">
-                                <svg viewBox="0 0 400 50" preserveAspectRatio="none" class="w-full h-full stroke-current fill-none stroke-[2]"><path d="M0,25 L10,35 L20,15 L30,30 L40,20 L50,40 L60,10 L70,30 L80,25 L90,20 L100,35 L110,15 L120,30 L130,20 L140,40 L150,10 L160,30 L170,25 L180,20 L190,35 L200,15 L210,30 L220,20 L230,40 L240,10 L250,30 L260,25 L270,20 L280,35 L290,15 L300,30 L310,20 L320,40 L330,10 L340,30 L350,25 L360,20 L370,35 L380,15 L390,30 L400,25" /></svg>
-                            </div>
+                            <div class="w-1/4 relative z-10"><h3 class="font-bold text-xl text-red-700">4. Irregular (I)</h3><p class="text-sm text-slate-600"><strong>Noise/Error.</strong> Target smoothing.</p></div>
+                            <div class="flex-1 h-20 text-red-500 relative z-10"><svg viewBox="0 0 400 50" preserveAspectRatio="none" class="w-full h-full stroke-current fill-none stroke-[2]"><path d="M0,25 L10,35 L20,15 L30,30 L40,20 L50,40 L60,10 L70,30 L80,25 L90,20 L100,35 L110,15 L120,30 L130,20 L140,40 L150,10 L160,30 L170,25 L180,20 L190,35 L200,15 L210,30 L220,20 L230,40 L240,10 L250,30 L260,25 L270,20 L280,35 L290,15 L300,30 L310,20 L320,40 L330,10 L340,30 L350,25 L360,20 L370,35 L380,15 L390,30 L400,25" /></svg></div>
                         </div>
                     </div>
                 </div>
@@ -213,181 +184,187 @@
             <div class="min-w-full h-full relative overflow-hidden bg-slate-900 text-white flex flex-col justify-center items-center p-10 text-center">
                 <div class="absolute inset-0 bg-gradient-to-br from-indigo-950 to-black z-0"></div>
                 <div id="noise-bg" class="absolute inset-0 noise-overlay opacity-100 transition-opacity duration-1000 z-10 pointer-events-none"></div>
-
-                <div class="slide-content z-20 w-full max-w-6xl flex flex-col items-center justify-evenly h-full">
-                    <div>
-                        <div class="inline-block px-6 py-2 bg-white/10 border border-white/20 rounded-full text-white text-sm font-bold tracking-widest mb-4">
-                            KONSEP UTAMA
-                        </div>
-                        <h1 class="text-6xl md:text-7xl font-extrabold leading-tight">
-                            Data <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-cyan-400">Smoothing</span>
-                        </h1>
-                        <p class="text-slate-400 text-xl mt-4 max-w-2xl mx-auto">
-                            "Proses meminimalisir fluktuasi jangka pendek (Noise) untuk memperjelas pola jangka panjang (Trend/Cycle)."
-                        </p>
-                    </div>
-                    
-                    <div class="bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-white/10 w-full flex gap-8 items-center shadow-2xl max-w-4xl">
-                        <div class="w-32 h-32 bg-slate-800 rounded-full flex items-center justify-center text-6xl border-4 border-slate-600 shadow-inner shrink-0">
+                <div class="slide-content z-20 w-full max-w-7xl flex gap-12 items-center h-full">
+                    <div class="w-1/2 flex flex-col items-center justify-center">
+                        <div class="w-48 h-48 bg-slate-800 rounded-full flex items-center justify-center text-8xl border-4 border-slate-600 shadow-2xl mb-8 relative group">
+                            <div class="absolute inset-0 bg-indigo-500/20 rounded-full animate-ping"></div>
                             <i class="ph-fill ph-radio"></i>
                         </div>
-                        <div class="text-left flex-1">
-                            <h3 class="font-bold text-2xl text-white mb-2">Analogi Tuning Radio</h3>
-                            <p class="text-slate-300 text-lg leading-relaxed">
-                                "Bayangkan data mentah seperti radio dengan sinyal 'kresek-kresek'. Data Smoothing adalah proses memutar tombol tuning untuk menghilangkan suara statis (Noise) agar suara penyiar (Signal Asli) terdengar jernih."
-                            </p>
+                        <h2 class="text-4xl font-bold mb-4">Analogi Tuning Radio</h2>
+                        <button id="toggle-noise-btn" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full font-bold transition shadow-lg border border-white/20 flex items-center gap-2">
+                            <i class="ph-bold ph-faders"></i> <span id="noise-btn-text">Hilangkan Noise</span>
+                        </button>
+                    </div>
+                    <div class="w-1/2 text-left space-y-8">
+                        <div>
+                            <div class="inline-block px-4 py-1 bg-green-500/20 text-green-400 rounded-full text-xs font-bold uppercase tracking-wider mb-2">Definisi Teknis</div>
+                            <h3 class="text-3xl font-bold mb-3">Apa itu Data Smoothing?</h3>
+                            <p class="text-slate-300 leading-relaxed text-lg">Metode statistik untuk menghilangkan variasi acak (noise) dari dataset. Tujuannya adalah memperhalus kurva agar pola fundamental (Trend/Seasonal) terlihat jelas.</p>
                         </div>
-                    </div>
-
-                    <button id="toggle-noise-btn" class="group px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full font-bold text-xl transition shadow-[0_0_30px_rgba(79,70,229,0.5)] flex items-center gap-3 active:scale-95 border border-white/20">
-                        <i class="ph-bold ph-faders text-2xl"></i> 
-                        <span id="noise-btn-text">Hilangkan Noise</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="min-w-full h-full flex bg-white">
-                <div class="w-5/12 p-10 bg-slate-50 border-r border-slate-200 overflow-y-auto slide-content flex flex-col">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="bg-indigo-600 text-white px-3 py-1 rounded text-xs font-bold uppercase tracking-widest">Metode 1</span>
-                        <h2 class="text-3xl font-bold text-slate-900">Simple Moving Average (SMA)</h2>
-                    </div>
-                    <div class="prose text-slate-600 mb-6 text-sm leading-relaxed text-justify">
-                        <p>SMA adalah metode smoothing paling dasar. Cara kerjanya adalah mengambil rata-rata aritmatika dari sejumlah data terakhir (disebut window <span class="math">k</span>).</p>
-                        <p><strong>Karakteristik:</strong> Memberikan bobot yang <u>SAMA</u> rata untuk setiap data dalam window. Data kemarin dianggap sama pentingnya dengan data 5 hari lalu.</p>
-                    </div>
-                    <div class="bg-white rounded-xl border-l-8 border-indigo-500 shadow-sm p-6 mb-6">
-                        <p class="font-mono text-xl text-center text-slate-800 leading-relaxed">
-                            <span class="math">SMA<sub>t</sub></span> = 
-                            <span class="math">&Sigma; X<sub>i</sub></span> / <span class="math">k</span>
-                        </p>
-                    </div>
-                </div>
-                <div class="w-7/12 p-10 flex flex-col bg-white relative h-full justify-between">
-                    <div class="flex-1 flex flex-col justify-center">
-                        <canvas id="smaChart" class="w-full h-[350px] mb-6"></canvas>
-                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm mb-4">
-                            <div class="flex justify-between items-center mb-4">
-                                <label class="text-lg font-bold text-slate-700 uppercase">Window Size (<span class="math">k</span>)</label>
-                                <span id="sma-value" class="text-indigo-600 font-bold bg-indigo-100 px-4 py-1 rounded-lg text-2xl">3</span>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                                <h4 class="font-bold text-indigo-400 mb-2 flex items-center gap-2"><i class="ph-fill ph-eye"></i> Visualisasi</h4>
+                                <p class="text-sm text-slate-400">Mempermudah otak manusia melihat pola arah di tengah grafik yang "gerigi".</p>
                             </div>
-                            <input type="range" id="sma-slider" min="2" max="10" value="3" step="1" class="w-full">
+                            <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                                <h4 class="font-bold text-pink-400 mb-2 flex items-center gap-2"><i class="ph-fill ph-chart-line-up"></i> Prediksi</h4>
+                                <p class="text-sm text-slate-400">Data bersih menghasilkan model forecasting yang lebih akurat (tidak overfitting ke noise).</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="bg-indigo-900 text-white p-4 rounded-xl shadow-lg">
-                        <div class="math-box bg-transparent border-0 p-0 shadow-none text-sm leading-relaxed text-indigo-100" id="sma-math-box">...</div>
                     </div>
                 </div>
             </div>
 
-            <div class="min-w-full h-full p-12 bg-slate-50 flex flex-col justify-center">
+            <div class="min-w-full h-full p-10 bg-slate-50 flex flex-col justify-center">
+                <div class="slide-content h-full flex flex-col">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="bg-indigo-600 text-white px-3 py-1 rounded text-xs font-bold uppercase tracking-widest">Metode 1</span>
+                        <h2 class="text-4xl font-bold text-slate-900">Simple Moving Average (SMA)</h2>
+                    </div>
+                    <div class="grid grid-cols-2 gap-12 flex-1 items-center">
+                        <div class="flex flex-col h-full justify-between">
+                            <div class="text-slate-700 text-lg leading-relaxed text-justify">
+                                <p class="mb-4">Metode paling dasar yang menghitung rata-rata aritmatika dari <span class="math">k</span> data terakhir. Sering disebut "Jendela Berjalan".</p>
+                                <div class="bg-white p-6 rounded-xl border-l-8 border-indigo-500 shadow-md">
+                                    <p class="font-mono text-2xl text-center text-slate-800"><span class="math">SMA<sub>t</sub></span> = <span class="math">&Sigma; X<sub>i</sub></span> / <span class="math">k</span></p>
+                                </div>
+                            </div>
+                            <div class="bg-indigo-100/50 p-6 rounded-2xl border border-indigo-200 mt-4">
+                                <h3 class="font-bold text-indigo-800 mb-2 flex items-center gap-2"><i class="ph-fill ph-cpu"></i> Bedah Logika</h3>
+                                <ul class="space-y-3 text-sm text-slate-700">
+                                    <li class="flex gap-2"><i class="ph-bold ph-equals text-indigo-500"></i> <strong>Bobot Setara:</strong> Data H-1 dianggap sama pentingnya dengan data H-5. Ini kelemahan utamanya (naif).</li>
+                                    <li class="flex gap-2"><i class="ph-bold ph-rows text-indigo-500"></i> <strong>Filter Efektif:</strong> Sangat bagus untuk membuang noise frekuensi tinggi pada data yang trennya datar.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-200 h-full flex flex-col relative">
+                            <div class="flex justify-between items-center mb-4">
+                                <div class="text-sm font-bold text-slate-500">SIMULASI WINDOW (<span class="math">k</span>)</div>
+                                <span id="sma-value" class="text-indigo-600 font-bold bg-indigo-100 px-3 py-1 rounded">3</span>
+                            </div>
+                            <div class="flex-1 relative"><canvas id="smaChart"></canvas></div>
+                            <input type="range" id="sma-slider" min="2" max="10" value="3" step="1" class="w-full mt-4">
+                            <div class="bg-slate-100 p-3 rounded-lg mt-3 text-xs font-mono text-slate-600" id="sma-math-box">Wait...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="min-w-full h-full p-10 bg-slate-50 flex flex-col justify-center">
                 <div class="slide-content h-full flex flex-col">
                     <div class="flex items-center gap-3 mb-6">
                         <span class="bg-blue-600 text-white px-3 py-1 rounded text-xs font-bold uppercase tracking-widest">Metode 2</span>
                         <h2 class="text-4xl font-bold text-slate-900">Weighted Moving Average (WMA)</h2>
                     </div>
-
                     <div class="grid grid-cols-2 gap-12 flex-1 items-center">
                         <div class="space-y-6 text-slate-700 text-lg leading-relaxed text-justify">
-                            <p>
-                                <strong>Mengapa SMA saja tidak cukup?</strong><br>
-                                Kelemahan SMA adalah menganggap data lama sama pentingnya dengan data baru. Padahal dalam realita (misal: harga saham), harga kemarin lebih relevan memprediksi hari ini dibanding harga minggu lalu.
-                            </p>
-                            <p>
-                                <strong>Solusi WMA:</strong><br>
-                                Kita memberikan <strong>Bobot (<span class="math">w</span>)</strong> yang berbeda. Data terbaru diberi bobot terbesar, data lama diberi bobot terkecil.
-                            </p>
-                            <div class="bg-white p-6 rounded-xl border-l-8 border-blue-500 shadow-md my-4">
-                                <p class="font-mono text-xl text-center text-slate-800">
-                                    <span class="math">WMA<sub>t</sub></span> = 
-                                    <span class="math">&Sigma; (w<sub>i</sub> &cdot; X<sub>i</sub>)</span> / <span class="math">&Sigma; w<sub>i</sub></span>
-                                </p>
+                            <p>Memperbaiki kenaifan SMA dengan memberikan <strong>Bobot (<span class="math">w</span>)</strong> berbeda. Data terbaru diberi bobot terbesar.</p>
+                            <div class="bg-white p-6 rounded-xl border-l-8 border-blue-500 shadow-md">
+                                <p class="font-mono text-xl text-center text-slate-800"><span class="math">WMA<sub>t</sub></span> = <span class="math">&Sigma; (w<sub>i</sub> &cdot; X<sub>i</sub>)</span> / <span class="math">&Sigma; w<sub>i</sub></span></p>
+                            </div>
+                            <div class="bg-blue-50 p-4 rounded-lg text-sm border border-blue-200">
+                                <strong>Logika Pasar:</strong> Harga saham kemarin lebih relevan memprediksi hari ini dibanding harga bulan lalu. Maka, bobot kemarin harus lebih besar.
                             </div>
                         </div>
-
                         <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-200 flex flex-col justify-center h-full">
-                            <h3 class="font-bold text-center mb-6 text-slate-500">Perbandingan Bobot</h3>
-                            
+                            <h3 class="font-bold text-center mb-6 text-slate-500">Visualisasi Bobot</h3>
                             <div class="mb-8">
-                                <div class="text-sm font-bold text-slate-400 mb-2 text-center">SMA (Bobot Rata)</div>
-                                <div class="flex gap-2 justify-center">
-                                    <div class="h-20 w-16 bg-indigo-300 flex items-center justify-center text-white font-bold rounded">33%</div>
-                                    <div class="h-20 w-16 bg-indigo-300 flex items-center justify-center text-white font-bold rounded">33%</div>
-                                    <div class="h-20 w-16 bg-indigo-300 flex items-center justify-center text-white font-bold rounded">33%</div>
-                                </div>
-                                <div class="flex gap-2 justify-center mt-1 text-xs text-slate-400">
-                                    <div class="w-16 text-center">H-3</div><div class="w-16 text-center">H-2</div><div class="w-16 text-center">H-1</div>
-                                </div>
+                                <div class="text-sm font-bold text-slate-400 mb-2 text-center">SMA (Rata)</div>
+                                <div class="flex gap-2 justify-center"><div class="h-16 w-16 bg-indigo-300 flex items-center justify-center text-white rounded">33%</div><div class="h-16 w-16 bg-indigo-300 flex items-center justify-center text-white rounded">33%</div><div class="h-16 w-16 bg-indigo-300 flex items-center justify-center text-white rounded">33%</div></div>
                             </div>
-
                             <div>
-                                <div class="text-sm font-bold text-blue-600 mb-2 text-center">WMA (Bobot Bertingkat)</div>
+                                <div class="text-sm font-bold text-blue-600 mb-2 text-center">WMA (Bertingkat)</div>
                                 <div class="flex gap-2 justify-center items-end">
-                                    <div class="h-10 w-16 bg-blue-200 flex items-center justify-center text-blue-800 font-bold rounded opacity-60">10%</div>
-                                    <div class="h-20 w-16 bg-blue-400 flex items-center justify-center text-white font-bold rounded">30%</div>
-                                    <div class="h-32 w-16 bg-blue-600 flex items-center justify-center text-white font-bold rounded shadow-lg">60%</div>
+                                    <div class="h-8 w-16 bg-blue-200 flex items-center justify-center text-blue-800 rounded text-xs">10%</div>
+                                    <div class="h-16 w-16 bg-blue-400 flex items-center justify-center text-white rounded">30%</div>
+                                    <div class="h-28 w-16 bg-blue-600 flex items-center justify-center text-white font-bold rounded shadow-lg">60%</div>
                                 </div>
-                                <div class="flex gap-2 justify-center mt-1 text-xs text-slate-400">
-                                    <div class="w-16 text-center">H-3</div><div class="w-16 text-center">H-2</div><div class="w-16 text-center font-bold text-blue-600">Terbaru</div>
-                                </div>
+                                <div class="flex gap-2 justify-center mt-2 text-xs text-slate-400 font-mono"><div class="w-16 text-center">H-3</div><div class="w-16 text-center">H-2</div><div class="w-16 text-center font-bold text-blue-600">Now</div></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="min-w-full h-full flex bg-slate-900 text-white">
-                <div class="w-4/12 p-8 bg-slate-800 border-r border-slate-700 overflow-y-auto slide-content flex flex-col">
-                    <span class="text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2 mb-2"><i class="ph-fill ph-star"></i> Metode 3</span>
-                    <h2 class="text-3xl font-bold mb-4">Single Exponential Smoothing</h2>
-                    <div class="text-sm text-slate-300 mb-6 space-y-4 text-justify">
-                        <p>Jika WMA butuh banyak bobot manual, Exponential Smoothing menyelesaikannya dengan satu parameter saja: <strong>Alpha (<span class="math">&alpha;</span>)</strong>.</p>
-                        <p>Bobot menurun secara eksponensial otomatis. Sangat efisien memori karena bersifat rekursif.</p>
+            <div class="min-w-full h-full p-10 bg-slate-50 flex flex-col justify-center">
+                <div class="slide-content h-full flex flex-col">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="bg-cyan-600 text-white px-3 py-1 rounded text-xs font-bold uppercase tracking-widest">Metode 3</span>
+                        <h2 class="text-4xl font-bold text-slate-900">Single Exponential Smoothing</h2>
                     </div>
-                    <div class="bg-slate-900 rounded-xl border border-cyan-500/50 p-6 mb-6 text-center">
-                        <p class="font-mono text-xl text-cyan-400">
-                            <span class="math">S<sub>t</sub></span> = 
-                            <span class="math">&alpha;X<sub>t</sub></span> + 
-                            <span class="math">(1-&alpha;)S<sub>t-1</sub></span>
-                        </p>
-                    </div>
-                </div>
-                <div class="w-8/12 p-8 flex flex-col justify-center bg-slate-900 relative h-full">
-                    <canvas id="expChart" class="w-full h-[350px] mb-6"></canvas>
-                    <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 w-full shadow-xl flex items-center gap-6">
-                        <div class="flex-1">
-                            <label class="text-sm font-bold text-slate-300 uppercase mb-2 block">Sensitivity Alpha (<span class="math">&alpha;</span>)</label>
-                            <input type="range" id="alpha-slider" min="0.1" max="0.9" value="0.2" step="0.1" class="w-full">
+                    <div class="grid grid-cols-2 gap-12 flex-1 items-center">
+                        <div class="flex flex-col h-full justify-between">
+                            <div class="text-slate-700 text-lg leading-relaxed text-justify">
+                                <p class="mb-4">Solusi elegan untuk masalah bobot. Menggunakan satu parameter <strong>Alpha (<span class="math">&alpha;</span>)</strong> untuk menurunkan bobot data lama secara eksponensial (melengkung).</p>
+                                <div class="bg-white p-6 rounded-xl border-l-8 border-cyan-500 shadow-md">
+                                    <p class="font-mono text-xl text-center text-slate-800"><span class="math">S<sub>t</sub></span> = <span class="math">&alpha;X<sub>t</sub></span> + <span class="math">(1-&alpha;)S<sub>t-1</sub></span></p>
+                                </div>
+                            </div>
+                            <div class="bg-cyan-50 p-6 rounded-2xl border border-cyan-200 mt-4">
+                                <h3 class="font-bold text-cyan-800 mb-2 flex items-center gap-2"><i class="ph-fill ph-sliders"></i> Peran Alpha (<span class="math">&alpha;</span>)</h3>
+                                <div class="grid grid-cols-2 gap-4 text-sm">
+                                    <div class="bg-white p-3 rounded border border-cyan-100">
+                                        <div class="font-bold text-cyan-600">Alpha Kecil (0.1)</div>
+                                        <div class="text-slate-500 text-xs">Sangat halus, tapi lag parah. Mengutamakan sejarah panjang.</div>
+                                    </div>
+                                    <div class="bg-white p-3 rounded border border-cyan-100">
+                                        <div class="font-bold text-cyan-600">Alpha Besar (0.9)</div>
+                                        <div class="text-slate-500 text-xs">Sangat responsif, tapi masih kasar (noisy). Mengutamakan data baru.</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <span id="alpha-value" class="text-cyan-400 font-bold bg-cyan-900/30 px-4 py-2 rounded-lg border border-cyan-900 text-2xl">0.2</span>
-                    </div>
-                    <div class="bg-cyan-950/50 text-white p-4 rounded-xl shadow-xl mt-4 border border-cyan-900">
-                        <div class="math-box bg-transparent border-0 p-0 shadow-none text-sm leading-relaxed text-cyan-100" id="exp-math-box">...</div>
+                        <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-200 h-full flex flex-col relative">
+                            <div class="flex justify-between items-center mb-4">
+                                <div class="text-sm font-bold text-slate-500">SIMULASI SENSITIVITAS</div>
+                                <span id="alpha-value" class="text-cyan-600 font-bold bg-cyan-100 px-3 py-1 rounded">0.2</span>
+                            </div>
+                            <div class="flex-1 relative"><canvas id="expChart"></canvas></div>
+                            <input type="range" id="alpha-slider" min="0.1" max="0.9" value="0.2" step="0.1" class="w-full mt-4">
+                            <div class="bg-slate-100 p-3 rounded-lg mt-3 text-xs font-mono text-slate-600" id="exp-math-box">Wait...</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="min-w-full h-full p-12 bg-white flex flex-col justify-center">
-                <div class="slide-content w-full max-w-6xl mx-auto">
-                    <div class="text-center mb-8">
-                        <h2 class="text-4xl font-bold text-slate-900">Advanced Exponential Methods</h2>
-                        <p class="text-slate-500 mt-2 text-xl">Single Exp hanya untuk data datar. Bagaimana jika ada Tren/Musim?</p>
+            <div class="min-w-full h-full p-10 bg-slate-900 text-white flex flex-col">
+                <div class="slide-content h-full flex flex-col">
+                    <div class="text-center mb-6">
+                        <h2 class="text-3xl font-bold">Advanced Methods: Beyond Single Level</h2>
+                        <p class="text-slate-400">Untuk data yang memiliki pola Tren (Naik/Turun) dan Musiman.</p>
                     </div>
-                    <div class="grid grid-cols-2 gap-8 flex-1">
-                        <div class="p-8 bg-indigo-50 rounded-[2rem] border border-indigo-100 flex flex-col">
-                            <h3 class="text-2xl font-bold text-indigo-900 mb-4 flex items-center gap-3"><i class="ph-bold ph-trend-up"></i> Double (Holt)</h3>
-                            <p class="text-slate-600 mb-4 text-justify">Digunakan jika data memiliki <strong>Tren</strong> (naik/turun). Menambahkan persamaan kedua untuk memuluskan kemiringan (slope).</p>
-                            <div class="bg-white p-4 rounded-xl border border-indigo-200 text-sm font-mono text-slate-700 space-y-2 mt-auto">
-                                <p><span class="math">L<sub>t</sub></span> = Level (Rata-rata)</p>
-                                <p><span class="math">T<sub>t</sub></span> = Trend (Kemiringan)</p>
+                    
+                    <div class="flex-1 grid grid-cols-2 gap-6">
+                        <div class="bg-slate-800 rounded-2xl p-6 border border-indigo-500/30 flex flex-col relative overflow-hidden group hover:border-indigo-500 transition">
+                            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition"><i class="ph-fill ph-trend-up text-9xl"></i></div>
+                            <h3 class="text-xl font-bold text-indigo-400 mb-2 border-b border-indigo-500/30 pb-2">Double Exp (Holt's Method)</h3>
+                            <p class="text-sm text-slate-300 mb-4 h-10">Menambahkan persamaan kedua untuk memuluskan <strong>Tren (Slope/Kemiringan)</strong>.</p>
+                            <div class="bg-black/30 p-3 rounded text-xs font-mono text-indigo-200 mb-4 space-y-1">
+                                <div>Level: <span class="math">L<sub>t</sub> = &alpha;Y<sub>t</sub> + (1-&alpha;)(L<sub>t-1</sub> + T<sub>t-1</sub>)</span></div>
+                                <div>Trend: <span class="math">T<sub>t</sub> = &beta;(L<sub>t</sub> - L<sub>t-1</sub>) + (1-&beta;)T<sub>t-1</sub></span></div>
+                                <div>Forecast: <span class="math">Y<sub>t+h</sub> = L<sub>t</sub> + hT<sub>t</sub></span></div>
+                            </div>
+                            <div class="flex-1 bg-slate-900 rounded border border-slate-700 relative">
+                                <div class="absolute top-2 left-2 text-[10px] text-indigo-400">Simulation: Linear Trend</div>
+                                <canvas id="doubleSimChart"></canvas>
                             </div>
                         </div>
-                        <div class="p-8 bg-purple-50 rounded-[2rem] border border-purple-100 flex flex-col">
-                            <h3 class="text-2xl font-bold text-purple-900 mb-4 flex items-center gap-3"><i class="ph-bold ph-calendar"></i> Triple (Holt-Winters)</h3>
-                            <p class="text-slate-600 mb-4 text-justify">Digunakan jika data memiliki <strong>Tren + Musiman</strong>. Metode paling kompleks dan lengkap.</p>
-                            <div class="bg-white p-4 rounded-xl border border-purple-200 text-sm font-mono text-slate-700 space-y-2 mt-auto">
-                                <p><span class="math">S<sub>t</sub></span> = Seasonal Component</p>
-                                <p><span class="math">m</span> = Panjang Musim (mis: 12 bulan)</p>
+
+                        <div class="bg-slate-800 rounded-2xl p-6 border border-purple-500/30 flex flex-col relative overflow-hidden group hover:border-purple-500 transition">
+                            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition"><i class="ph-fill ph-calendar text-9xl"></i></div>
+                            <h3 class="text-xl font-bold text-purple-400 mb-2 border-b border-purple-500/30 pb-2">Triple Exp (Holt-Winters)</h3>
+                            <p class="text-sm text-slate-300 mb-4 h-10">Metode terlengkap. Menambahkan persamaan ketiga untuk pola <strong>Musiman (Seasonal)</strong>.</p>
+                            <div class="bg-black/30 p-3 rounded text-xs font-mono text-purple-200 mb-4 space-y-1">
+                                <div>Season: <span class="math">S<sub>t</sub> = &gamma;(Y<sub>t</sub>-L<sub>t</sub>) + (1-&gamma;)S<sub>t-m</sub></span></div>
+                                <div>Forecast: <span class="math">Y<sub>t+h</sub> = L<sub>t</sub> + hT<sub>t</sub> + S<sub>t+h-m</sub></span></div>
+                                <div class="text-slate-500 italic">*Formula disederhanakan</div>
+                            </div>
+                            <div class="flex-1 bg-slate-900 rounded border border-slate-700 flex items-center justify-center">
+                                <svg viewBox="0 0 200 80" class="w-full h-full p-4">
+                                    <path d="M10,40 Q30,10 50,40 T90,40 T130,40" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4"/>
+                                    <path d="M10,40 Q30,5 50,35 Q70,65 90,35 Q110,5 130,35 Q150,65 170,35" fill="none" stroke="#a855f7" stroke-width="3"/>
+                                    <text x="100" y="70" fill="#a855f7" font-size="10" text-anchor="middle">Seasonal Pattern (Captured)</text>
+                                </svg>
                             </div>
                         </div>
                     </div>
@@ -423,61 +400,81 @@
                 </div>
             </div>
 
-            <div class="min-w-full h-full p-6 bg-white flex flex-col">
+            <div class="min-w-full h-full p-4 bg-white flex flex-col">
                 <div class="slide-content h-full flex flex-col">
-                    <div class="flex justify-between items-center mb-4">
+                    <div class="flex justify-between items-center mb-2 px-4">
                         <h2 class="text-3xl font-bold text-slate-900">Evaluasi Akurasi (MSE & MAPE)</h2>
-                        <div class="text-sm bg-slate-100 px-3 py-1 rounded text-slate-600">
-                            Semakin kecil Error, semakin baik modelnya.
-                        </div>
+                        <div class="text-sm bg-red-100 text-red-600 px-3 py-1 rounded font-bold border border-red-200">Lower Score = Better Model</div>
                     </div>
                     
-                    <div class="flex-1 bg-slate-900 rounded-2xl p-4 relative border border-slate-700 shadow-inner flex flex-col">
-                        <div class="absolute top-4 right-4 flex gap-4 z-10">
-                            <div class="bg-slate-800/80 backdrop-blur px-4 py-2 rounded border-l-4 border-cyan-400">
-                                <div class="text-[10px] text-slate-400 uppercase tracking-widest">MSE Score</div>
-                                <div class="text-xl font-mono font-bold text-cyan-400" id="mse-score">0.00</div>
+                    <div class="flex-[3] bg-slate-900 rounded-2xl p-4 relative border border-slate-700 shadow-inner flex flex-col mb-4 overflow-hidden">
+                        <div class="absolute top-6 right-6 flex flex-col gap-4 z-10 pointer-events-none">
+                            <div class="bg-slate-800/90 backdrop-blur px-6 py-3 rounded-xl border-l-8 border-cyan-400 shadow-xl">
+                                <div class="text-xs text-slate-400 uppercase tracking-widest font-bold mb-1">MSE Score</div>
+                                <div class="text-4xl font-mono font-bold text-cyan-400" id="mse-score">0.00</div>
                             </div>
-                            <div class="bg-slate-800/80 backdrop-blur px-4 py-2 rounded border-l-4 border-yellow-400">
-                                <div class="text-[10px] text-slate-400 uppercase tracking-widest">MAPE Score</div>
-                                <div class="text-xl font-mono font-bold text-yellow-400" id="mape-score">0.00%</div>
+                            <div class="bg-slate-800/90 backdrop-blur px-6 py-3 rounded-xl border-l-8 border-yellow-400 shadow-xl">
+                                <div class="text-xs text-slate-400 uppercase tracking-widest font-bold mb-1">MAPE Score</div>
+                                <div class="text-4xl font-mono font-bold text-yellow-400" id="mape-score">0.0%</div>
                             </div>
                         </div>
-                        <div class="flex-1 w-full relative">
-                            <canvas id="errorChart"></canvas>
-                        </div>
+                        <div class="flex-1 w-full relative"><canvas id="errorChart"></canvas></div>
                     </div>
 
-                    <div class="h-20 bg-slate-50 mt-4 rounded-xl border border-slate-200 flex items-center px-8 gap-8">
-                        <div class="w-1/3">
-                            <label class="text-xs font-bold text-slate-500 uppercase mb-1 block">Atur Alpha (<span class="math">&alpha;</span>)</label>
-                            <input type="range" id="error-slider" min="0.1" max="0.9" step="0.1" value="0.2" class="w-full h-2 bg-slate-300 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex-[1] flex gap-6 px-4">
+                        <div class="w-1/3 bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center">
+                            <label class="text-sm font-bold text-slate-600 uppercase mb-2 block">Tuning Alpha (<span class="math">&alpha;</span>)</label>
+                            <input type="range" id="error-slider" min="0.1" max="0.9" step="0.1" value="0.2" class="w-full h-3 bg-slate-300 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-xs text-slate-400 mt-2"><span>Smooth (0.1)</span><span>Reactive (0.9)</span></div>
                         </div>
-                        <div class="flex-1 text-xs text-slate-500 text-justify border-l pl-6">
-                            <strong>Rumus Evaluasi:</strong><br>
-                            <span class="math">MSE = &Sigma;(Actual - Forecast)<sup>2</sup> / n</span> (Menghukum error besar)<br>
-                            <span class="math">MAPE = &Sigma;(|Error| / Actual) / n * 100%</span> (Persentase rata-rata)
+                        <div class="flex-1 grid grid-cols-2 gap-4">
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center">
+                                <div class="text-xs font-bold text-slate-400 uppercase mb-1">MSE Formula (Hukuman Berat)</div>
+                                <div class="font-mono text-lg text-slate-800"><span class="math">&Sigma;(Aktual - Forecast)<sup>2</sup> / n</span></div>
+                                <p class="text-[10px] text-slate-500 mt-1 leading-tight">Menguadratkan error, sehingga kesalahan besar sangat "menyakitkan" bagi skor.</p>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center">
+                                <div class="text-xs font-bold text-slate-400 uppercase mb-1">MAPE Formula (Persentase)</div>
+                                <div class="font-mono text-lg text-slate-800"><span class="math">&Sigma;(|Error| / Aktual) / n</span></div>
+                                <p class="text-[10px] text-slate-500 mt-1 leading-tight">Rata-rata persentase kesalahan. Lebih mudah dipahami oleh bisnis.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="min-w-full h-full p-12 bg-white flex flex-col justify-center">
-                <div class="slide-content max-w-6xl mx-auto w-full text-center">
+                <div class="slide-content max-w-7xl mx-auto w-full text-center">
                     <h2 class="text-4xl font-bold text-slate-900 mb-8">Strategi Pemilihan Metode</h2>
-                    <div class="overflow-hidden border border-slate-200 rounded-2xl shadow-xl text-left">
-                        <table class="w-full text-base">
+                    <div class="overflow-hidden border border-slate-200 rounded-2xl shadow-xl text-left bg-white">
+                        <table class="w-full text-lg">
                             <thead class="bg-indigo-700 text-white">
                                 <tr>
-                                    <th class="p-5 font-bold uppercase w-1/3">Pola Data</th>
-                                    <th class="p-5 font-bold uppercase w-1/3">Metode Terbaik</th>
-                                    <th class="p-5 font-bold uppercase w-1/3">Alasan Teknis</th>
+                                    <th class="p-6 font-bold uppercase w-1/4">Visual Pola</th>
+                                    <th class="p-6 font-bold uppercase w-1/4">Karakteristik</th>
+                                    <th class="p-6 font-bold uppercase w-1/4">Metode Terbaik</th>
+                                    <th class="p-6 font-bold uppercase w-1/4">Alasan</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-200 bg-white text-slate-700">
-                                <tr class="hover:bg-indigo-50 transition"><td class="p-5 font-bold"><i class="ph-fill ph-minus text-slate-400 mr-2"></i> Datar / Stasioner</td><td class="p-5"><span class="bg-slate-200 px-3 py-1 rounded-full text-sm font-bold text-slate-800">SMA / Single Exp</span></td><td class="p-5 text-slate-600">Cukup level smoothing tanpa komponen tren.</td></tr>
-                                <tr class="hover:bg-indigo-50 transition"><td class="p-5 font-bold"><i class="ph-fill ph-trend-up text-indigo-500 mr-2"></i> Memiliki Tren</td><td class="p-5"><span class="bg-indigo-100 px-3 py-1 rounded-full text-sm font-bold text-indigo-800">Double Exp (Holt)</span></td><td class="p-5 text-slate-600">Mampu mengejar kemiringan (slope) data.</td></tr>
-                                <tr class="hover:bg-indigo-50 transition"><td class="p-5 font-bold"><i class="ph-fill ph-calendar text-purple-500 mr-2"></i> Musiman</td><td class="p-5"><span class="bg-purple-100 px-3 py-1 rounded-full text-sm font-bold text-purple-800">Triple Exp (Winter)</span></td><td class="p-5 text-slate-600">Menangkap repetisi periodik (<span class="math">S<sub>t</sub></span>).</td></tr>
+                            <tbody class="divide-y divide-slate-200 text-slate-700">
+                                <tr class="hover:bg-indigo-50 transition h-32">
+                                    <td class="p-4 bg-slate-50 pattern-flat relative overflow-hidden"><svg viewBox="0 0 100 40" class="absolute inset-0 w-full h-full text-slate-400 stroke-current stroke-[3] fill-none opacity-50"><path d="M0,20 Q20,10 40,25 T80,20 T100,22"/></svg></td>
+                                    <td class="p-6 font-bold">Datar / Stasioner</td>
+                                    <td class="p-6"><span class="bg-slate-200 px-4 py-2 rounded-full font-bold text-slate-800">Single Exp / SMA</span></td>
+                                    <td class="p-6 text-slate-600 text-base">Hanya perlu meratakan noise di sekitar rata-rata (Level).</td>
+                                </tr>
+                                <tr class="hover:bg-indigo-50 transition h-32">
+                                    <td class="p-4 bg-indigo-50 relative overflow-hidden"><svg viewBox="0 0 100 40" class="absolute inset-0 w-full h-full text-indigo-400 stroke-current stroke-[3] fill-none"><path d="M0,35 L100,5"/></svg></td>
+                                    <td class="p-6 font-bold">Memiliki Tren</td>
+                                    <td class="p-6"><span class="bg-indigo-100 px-4 py-2 rounded-full font-bold text-indigo-800">Double Exp (Holt)</span></td>
+                                    <td class="p-6 text-slate-600 text-base">Membutuhkan komponen Slope (<span class="math">T<sub>t</sub></span>) agar forecast tidak tertinggal.</td>
+                                </tr>
+                                <tr class="hover:bg-indigo-50 transition h-32">
+                                    <td class="p-4 bg-purple-50 relative overflow-hidden"><svg viewBox="0 0 100 40" class="absolute inset-0 w-full h-full text-purple-400 stroke-current stroke-[3] fill-none"><path d="M0,20 Q10,0 20,20 T40,20 T60,20 T80,20"/></svg></td>
+                                    <td class="p-6 font-bold">Musiman (Berulang)</td>
+                                    <td class="p-6"><span class="bg-purple-100 px-4 py-2 rounded-full font-bold text-purple-800">Triple Exp (Winter)</span></td>
+                                    <td class="p-6 text-slate-600 text-base">Wajib menangkap pola repetisi periodik (<span class="math">S<sub>t</sub></span>).</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -543,7 +540,7 @@
     </main>
 
     <script>
-        // --- DATASET & LOGIC ---
+        // --- DATASET ---
         const rawData = [40, 55, 38, 60, 45, 70, 55, 80, 65, 50, 75, 90, 70, 85, 60, 40, 55, 45, 60, 50];
         let currentSlide = 0;
         const track = document.getElementById('slides-track');
@@ -551,12 +548,12 @@
         const totalSlides = slides.length;
         document.getElementById('total-slide').innerText = totalSlides;
 
+        // Slide Navigation
         function updateSlide() {
             track.style.transform = `translateX(-${currentSlide * 100}%)`;
             document.getElementById('curr-slide').innerText = currentSlide + 1;
             Array.from(slides).forEach((s, i) => s.classList.toggle('active-slide', i === currentSlide));
         }
-
         document.getElementById('btn-next').addEventListener('click', () => { currentSlide = (currentSlide + 1) % totalSlides; updateSlide(); });
         document.getElementById('btn-prev').addEventListener('click', () => { currentSlide = (currentSlide - 1 + totalSlides) % totalSlides; updateSlide(); });
         document.addEventListener('keydown', (e) => {
@@ -565,18 +562,17 @@
         });
         slides[0].classList.add('active-slide');
 
-        // Noise Toggle (Slide 4)
-        const noiseBtn = document.getElementById('toggle-noise-btn');
-        if(noiseBtn){
-            let isNoisy = true;
-            noiseBtn.addEventListener('click', () => {
-                isNoisy = !isNoisy;
-                document.getElementById('noise-bg').style.opacity = isNoisy ? '1' : '0';
-                document.getElementById('noise-btn-text').innerText = isNoisy ? "Hilangkan Noise" : "Tampilkan Noise";
-            });
-        }
+        // --- VISUAL LOGIC ---
 
-        // Chart Drawing Utils
+        // 1. Live Ticker (Slide 2)
+        setInterval(() => {
+            const stock = document.getElementById('live-stock');
+            if(stock) stock.innerText = (9250 + (Math.random()*20 - 10)).toFixed(2);
+            const temp = document.getElementById('live-temp');
+            if(temp) temp.innerText = (42 + (Math.random()*2 - 1)).toFixed(1) + "°C";
+        }, 1000);
+
+        // 2. Chart Drawer
         function drawChart(canvasId, data, smoothData, color, isDark = false) {
             const canvas = document.getElementById(canvasId);
             if(!canvas) return;
@@ -591,13 +587,13 @@
             const stepX = width / (data.length - 1);
             const getY = (val) => height - ((val - minVal) / range) * height;
 
-            // Raw Data
+            // Raw
             ctx.beginPath();
             ctx.strokeStyle = isDark ? '#475569' : '#CBD5E1'; ctx.lineWidth = 2; ctx.setLineDash([5, 5]);
             data.forEach((val, i) => { i===0 ? ctx.moveTo(0, getY(val)) : ctx.lineTo(i * stepX, getY(val)); });
             ctx.stroke();
 
-            // Smooth Data
+            // Smooth
             ctx.beginPath();
             ctx.strokeStyle = color; ctx.lineWidth = 4; ctx.setLineDash([]);
             smoothData.forEach((val, i) => {
@@ -608,7 +604,7 @@
             ctx.stroke();
         }
 
-        // Logic SMA
+        // 3. SMA Logic
         function updateSMA() {
             const slider = document.getElementById('sma-slider');
             if(!slider) return;
@@ -623,20 +619,15 @@
                 }
             }
             drawChart('smaChart', rawData, smaData, '#4F46E5');
-            const exampleIdx = 5;
-            if (exampleIdx >= k - 1) {
-                let subset = rawData.slice(exampleIdx - k + 1, exampleIdx + 1);
-                let sumVal = subset.reduce((a, b) => a + b, 0);
-                document.getElementById('sma-math-box').innerHTML = `
-                    <div class="mb-2 text-xs text-indigo-300 font-bold uppercase">Langkah (t=${exampleIdx+1}):</div>
-                    <div class="mb-1"><span class="text-indigo-400">Data Window:</span> [${subset.join(', ')}]</div>
-                    <div class="mt-2 pt-2 border-t border-indigo-800/50">
-                        <span class="text-indigo-400">Average:</span> ${sumVal} / ${k} = <span class="text-white font-bold text-xl ml-2">${(sumVal / k).toFixed(2)}</span>
-                    </div>`;
-            } else { document.getElementById('sma-math-box').innerHTML = `<span class="text-red-400 font-bold">Data belum cukup</span>`; }
+            // Update Math Box
+            const exIdx = 5;
+            if(exIdx >= k-1) {
+                const sub = rawData.slice(exIdx-k+1, exIdx+1);
+                document.getElementById('sma-math-box').innerText = `SMA(t=${exIdx+1}) = [${sub.join('+')}] / ${k} = ${(sub.reduce((a,b)=>a+b)/k).toFixed(2)}`;
+            }
         }
 
-        // Logic EXP
+        // 4. Single Exp Logic
         function updateExp() {
             const slider = document.getElementById('alpha-slider');
             if(!slider) return;
@@ -644,17 +635,54 @@
             document.getElementById('alpha-value').innerText = alpha;
             let expData = [rawData[0]];
             for(let i=1; i<rawData.length; i++) expData.push(alpha * rawData[i] + (1 - alpha) * expData[i-1]);
-            drawChart('expChart', rawData, expData, '#22D3EE', true);
-            const i = 5;
-            document.getElementById('exp-math-box').innerHTML = `
-                <div class="mb-2 text-xs text-cyan-700 font-bold uppercase">Rekursif (t=${i+1}):</div>
-                <div class="font-mono text-sm bg-white/5 p-2 rounded border border-cyan-800/30">
-                    S<sub>t</sub> = ${alpha}×${rawData[i]} + ${(1-alpha).toFixed(1)}×${expData[i-1].toFixed(2)}
-                </div>
-                <div class="mt-2 text-right"><span class="text-cyan-400 font-bold text-xl">${expData[i].toFixed(2)}</span></div>`;
+            drawChart('expChart', rawData, expData, '#0891b2');
+             // Update Math Box
+            document.getElementById('exp-math-box').innerText = `St = ${alpha}*${rawData[5]} + ${(1-alpha).toFixed(1)}*${expData[4].toFixed(2)} = ${expData[5].toFixed(2)}`;
         }
 
-        // Logic ERROR METRICS (MSE & MAPE)
+        // 5. Double Exp Simulation (Slide 8)
+        function drawDoubleSim() {
+            const canvas = document.getElementById('doubleSimChart');
+            if(!canvas) return;
+            // Generate linear trend data
+            let tData = [];
+            for(let i=0; i<20; i++) tData.push(i*5 + Math.random()*10);
+            
+            // Calc Double (Holt) - Simplified
+            let dData = [tData[0]];
+            let level = tData[0];
+            let trend = tData[1] - tData[0];
+            let alpha = 0.5;
+            let beta = 0.3;
+            
+            for(let i=1; i<20; i++) {
+                let lastLevel = level;
+                level = alpha * tData[i] + (1-alpha)*(lastLevel + trend);
+                trend = beta * (level - lastLevel) + (1-beta)*trend;
+                dData.push(level + trend); // Forecast 1 step
+            }
+            
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width = canvas.offsetWidth;
+            const height = canvas.height = canvas.offsetHeight;
+            ctx.clearRect(0,0,width,height);
+            
+            // Draw Raw
+            const stepX = width/19;
+            const max = Math.max(...tData, ...dData);
+            const getY = v => height - (v/max)*height*0.8 - 10;
+            
+            ctx.beginPath(); ctx.strokeStyle = '#64748b'; ctx.setLineDash([2,2]);
+            tData.forEach((v,i) => i==0?ctx.moveTo(0,getY(v)):ctx.lineTo(i*stepX, getY(v)));
+            ctx.stroke();
+            
+            // Draw Double
+            ctx.beginPath(); ctx.strokeStyle = '#818cf8'; ctx.lineWidth=3; ctx.setLineDash([]);
+            dData.forEach((v,i) => i==0?ctx.moveTo(0,getY(v)):ctx.lineTo(i*stepX, getY(v)));
+            ctx.stroke();
+        }
+
+        // 6. Error Metrics Logic
         function updateErrorMetrics() {
             const slider = document.getElementById('error-slider');
             if(!slider) return;
@@ -668,17 +696,9 @@
             for(let i=1; i<rawData.length; i++) {
                 let val = alpha * rawData[i] + (1 - alpha) * expData[i-1];
                 expData.push(val);
-                
                 let error = rawData[i] - val;
-                
-                // MSE
                 mseSum += error * error;
-                
-                // MAPE
-                if (rawData[i] !== 0) {
-                    mapeSum += Math.abs(error / rawData[i]);
-                }
-                
+                if (rawData[i] !== 0) mapeSum += Math.abs(error / rawData[i]);
                 count++;
             }
             
@@ -688,23 +708,40 @@
             document.getElementById('mse-score').innerText = mse.toFixed(2);
             document.getElementById('mape-score').innerText = mape.toFixed(1) + "%";
             
-            drawChart('errorChart', rawData, expData, '#22D3EE', true);
+            drawChart('errorChart', rawData, expData, '#22d3ee', true);
         }
 
-        // Listeners
+        // Listeners & Init
         const smaSlider = document.getElementById('sma-slider');
         if(smaSlider) smaSlider.addEventListener('input', updateSMA);
-        
         const alphaSlider = document.getElementById('alpha-slider');
         if(alphaSlider) alphaSlider.addEventListener('input', updateExp);
-
         const errorSlider = document.getElementById('error-slider');
         if(errorSlider) errorSlider.addEventListener('input', updateErrorMetrics);
 
-        window.addEventListener('load', () => { updateSMA(); updateExp(); updateErrorMetrics(); });
-        window.addEventListener('resize', () => { updateSMA(); updateExp(); updateErrorMetrics(); });
+        // Run Init
+        window.addEventListener('load', () => { 
+            updateSMA(); 
+            updateExp(); 
+            updateErrorMetrics();
+            drawDoubleSim();
+        });
+        window.addEventListener('resize', () => {
+             updateSMA(); updateExp(); updateErrorMetrics(); drawDoubleSim();
+        });
 
-        // Python Simulation
+        // Toggle Noise (Slide 4)
+        const noiseBtn = document.getElementById('toggle-noise-btn');
+        if(noiseBtn){
+            let isNoisy = true;
+            noiseBtn.addEventListener('click', () => {
+                isNoisy = !isNoisy;
+                document.getElementById('noise-bg').style.opacity = isNoisy ? '1' : '0';
+                document.getElementById('noise-btn-text').innerText = isNoisy ? "Hilangkan Noise" : "Tampilkan Noise";
+            });
+        }
+        
+        // Python Run
         const runBtn = document.getElementById('run-code-btn');
         if(runBtn) {
             runBtn.addEventListener('click', async () => {
@@ -714,16 +751,13 @@
                 const log = (msg) => { terminal.innerHTML += `<div>> ${msg}</div>`; terminal.scrollTop = terminal.scrollHeight; };
                 const step = (id) => { document.querySelectorAll('[id^="step-"]').forEach(d=>d.className="p-3 rounded-lg border border-transparent flex gap-3 items-center transition"); document.getElementById(id).className="p-3 rounded-lg border border-green-500/30 bg-green-500/10 text-white transition flex gap-3 items-center"; };
 
-                terminal.innerHTML = ''; plotResult.classList.remove('show'); runBtn.disabled = true; runBtn.innerHTML = '<i class="ph-bold ph-spinner animate-spin"></i> Running...';
-                
+                terminal.innerHTML = ''; plotResult.classList.remove('show'); runBtn.disabled = true; runBtn.innerHTML = 'Running...';
                 highlight('line-1'); step('step-1-desc'); log("Importing pandas..."); await new Promise(r => setTimeout(r, 600));
                 highlight('line-5'); log("Loading data.csv..."); await new Promise(r => setTimeout(r, 600));
-                highlight('line-8'); step('step-2-desc'); log("Computing SMA (k=5)..."); await new Promise(r => setTimeout(r, 800));
-                highlight('line-11'); step('step-3-desc'); log("Computing EWM (a=0.2)..."); await new Promise(r => setTimeout(r, 800));
-                highlight('line-14'); step('step-4-desc'); log("Plotting graph..."); await new Promise(r => setTimeout(r, 1000));
-                
-                log("<span style='color:#4ade80'>Done.</span>"); document.querySelectorAll('.highlight-line').forEach(d=>d.classList.remove('highlight-line'));
-                plotResult.classList.add('show'); runBtn.disabled = false; runBtn.innerHTML = '<i class="ph-bold ph-play"></i> Jalankan Kode';
+                highlight('line-8'); step('step-2-desc'); log("Computing SMA..."); await new Promise(r => setTimeout(r, 800));
+                highlight('line-11'); step('step-3-desc'); log("Computing EWM..."); await new Promise(r => setTimeout(r, 800));
+                highlight('line-14'); step('step-4-desc'); log("Plotting..."); await new Promise(r => setTimeout(r, 1000));
+                log("<span style='color:#4ade80'>Done.</span>"); plotResult.classList.add('show'); runBtn.disabled = false; runBtn.innerHTML = 'Jalankan Kode';
             });
         }
     </script>
